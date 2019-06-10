@@ -10,8 +10,7 @@
 	</head>
 	<body>
 		<div class="wrapper">
-	   <div class = "col-sm-3"></div>
-     <div class = "col-sm-6">
+	  
     		<h1 >Post Job</h1>
     		<form  action="savejob.php" method="POST" enctype="multipart/form-data">
             <div class="form-row">
@@ -59,8 +58,7 @@
             </div>
             <button class="btn btn-primary" type="submit">Submit form</button>
           </form>
-        </div>
-        <div class = "col-sm-3"></div>
+        
     </div>
 	</body>
 </html>
