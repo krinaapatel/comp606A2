@@ -1,78 +1,57 @@
-<?php
-	session_start();
-	include_once("connection.php");
-	$conn = new mysqli("localhost","root","","safetrade");
-	$msg = "";
-	if(isset($_POST['login'])){
-		$name = $_POST['name'];
-		$password = $_POST['password'];
-		$userType = $_POST['userType'];
-		
-		$sql = "select * from users where name=? and password=? and role=?";
-		$stmt = $conn->prepare($sql);
-		$stmt->bind_param("sss",$name, $password, $userType);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$row = $result->fetch_assoc();
-		
-		session_regenerate_id();
-		$_SESSION['name'] = $row['name'];
-		$_SESSION['role'] = $row['role'];
-		session_write_close();
-		
-		if($result->num_rows==1 && $_SESSION['role']=="customer"){
-			header("location:customer.php");
-		}
-		else if($result->num_rows==1 && $_SESSION['role']=="tradesman"){
-			header("location:tradesman.php");
-		}
-		else{
-			$msg = "Username or password is incorrect!"; 
-		}
-	}
-?>
-
+<?php include('connection.php') ?>
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="author" content="html">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no"> 
-		<title>
-			Job Search	
-		</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<html>
+<head>
+	<title>Job Search</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<style>
+.footer{
+	position: fixed;
+}
+</style>
+<body>
+<div class="topnav">
 
-	</head>
-	<body class = "bg-dark">
-		<div class = "container">
-			<div class="row-justify-content center">
-				<div class="col-lg-5 bg-light mt-5 px-0">
-					<h3 class="text-center text-light bg-danger p-3">Login Here</h3>
-					
-					<form action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" class="p-4">
-						<div class="form-group">
-							<input type="text" name="name" class="form-control form-control-lg" placeholder="username" required /></div>
-						<div class="form-group">
-							<input type="password" name="password" class="form-control form-control-lg" placeholder="password" required />
-						</div>
-						<div class="form-group lead">
-							<label for="userType">Select Role:</label>
-							<input type="radio" name="userType" value="customer" class="custom-radio" required > &nbsp;Customer | 
-							<input type="radio" name="userType" value="tradesman" class="custom-radio" required > &nbsp;Tradesman |  
- 						</div>
-						<div class="form-group">
-							<input type="submit" name="login" class="btn btn-danger btn-block" />
-						</div>
-						<div class="form-group">
-							<a href="signup.php" class="btn btn-info btn-block">SignUp</a>
-						</div>
-						
-						<h5class="text-danger text-center"><?= $msg; ?></h5>
-					</form>
-				</div>
-			</div>
+
+<div class="col-sm-7">
+
+<?php  if (isset($_SESSION['username'])) {	?>
+<a class="" href="index.php">Dashboard</a>
+<a class="takeright" href="jobs.php">Home</a>
+ <?php } else { ?>
+<a class="takeright" href="login.php">Login</a>
+<a class="takeright" href="register.php">Signup</a>
+ <a class="takeright" href="home.php">Home</a>
+ <?php } ?>
+ </div>
+
+</div>
+	<div class="header w30">
+		<h2>Login</h2>
+	</div>
+
+	<form method="post" class="w30" style="height: auto;" action="login.php">
+
+		<?php include('errors.php'); ?>
+</br>
+		<div class="input-group col-sm-12">
+			<label>Username</label>
+			<input type="text" name="username" >
 		</div>
-	</body>
+		<div class="input-group col-sm-12">
+			<label>Password</label>
+			<input type="password" name="password">
+		</div>
+		<div class="input-group col-sm-12">
+			<button type="submit" class="btn yebt col-sm-6" name="login_user">Login</button>
+		</div>
+		<p>
+			Not yet a member? <a href="register.php">Sign up</a>
+		</p>
+		</br>
+	</form>
+
+
+</body>
 </html>
