@@ -44,7 +44,7 @@ include('header.php');
 
 <?php
 
-include("conection.php");
+include("connection.php");
 if (isset($_POST['register'])) {
     $user_name   = $_POST['name'];
     $user_pass   = $_POST['pass'];
