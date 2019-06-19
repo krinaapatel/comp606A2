@@ -1,57 +1,67 @@
-<?php include('connection.php') ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Job Search</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
-<style>
-.footer{
-	position: fixed;
-}
-</style>
-<body>
-<div class="topnav">
+<?php
+include('header.php');
+session_start();
+
+?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sign In</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="post" action="login.php">
+                        <fieldset>
+                            <div class="form-group"  >
+                                <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" name="pass" type="password" value="">
+                            </div>
 
 
-<div class="col-sm-7">
+                                <input class="btn btn-lg btn-success btn-block" type="submit" value="login" name="login" >
 
-<?php  if (isset($_SESSION['username'])) {	?>
-<a class="" href="index.php">Dashboard</a>
-<a class="takeright" href="jobs.php">Home</a>
- <?php } else { ?>
-<a class="takeright" href="login.php">Login</a>
-<a class="takeright" href="register.php">Signup</a>
- <a class="takeright" href="home.php">Home</a>
- <?php } ?>
- </div>
-
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-	<div class="header w30">
-		<h2>Login</h2>
-	</div>
-
-	<form method="post" class="w30" style="height: auto;" action="login.php">
-
-		<?php include('errors.php'); ?>
-</br>
-		<div class="input-group col-sm-12">
-			<label>Username</label>
-			<input type="text" name="username" >
-		</div>
-		<div class="input-group col-sm-12">
-			<label>Password</label>
-			<input type="password" name="password">
-		</div>
-		<div class="input-group col-sm-12">
-			<button type="submit" class="btn yebt col-sm-6" name="login_user">Login</button>
-		</div>
-		<p>
-			Not yet a member? <a href="register.php">Sign up</a>
-		</p>
-		</br>
-	</form>
 
 
-</body>
-</html>
+
+
+<?php
+
+include("conection.php");
+
+if(isset($_POST['login']))
+{
+    $user_email=$_POST['email'];
+    $user_pass=$_POST['pass'];
+
+    $check_user="select * from member WHERE user_email='$user_email'AND user_pass='$user_pass'";
+
+    $run=mysqli_query($dbcon,$check_user);
+
+
+    if(mysqli_num_rows($run))
+    {
+		$data_member = mysqli_fetch_assoc($run);
+		$_SESSION['member_id'] = $data_member['id'];
+		$_SESSION['member_username'] = $data_member['user_name'];
+		$_SESSION['member_type'] = $data_member['member_type'];
+        $_SESSION['email']=$user_email;
+
+echo "<script>window.open('welcome.php','_self')</script>";
+    }
+    else
+    {
+        echo "<script>alert('Email or password is incorrect!')</script>";
+    }
+}
+include('footer.php');
+?>
